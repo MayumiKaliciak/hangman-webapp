@@ -5,7 +5,7 @@ import lombok.extern.jackson.Jacksonized;
 
 @Jacksonized
 @Data
-public class Guess {
+public class GuessModel {
 
  private String guessedLetter;
 
