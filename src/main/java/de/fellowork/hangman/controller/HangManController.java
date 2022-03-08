@@ -14,32 +14,47 @@ import java.util.List;
 @Controller
 public class HangManController {
 
-	private List<String> currentWord;
+    private List<String> currentWord;
+    private List<String> guessedLetters = new ArrayList<>();
 
-	@PostMapping("/hangman")
-	public String wordGuess(@ModelAttribute GuessModel guessModel, Model model) {
-		log.info("Guess: " + guessModel);
-		model.addAttribute("guessModel", new GuessModel());
-		return "hangman";
+    @PostMapping("/hangman")
+    public String wordGuess(@ModelAttribute GuessModel guessModel, Model model) {
+        log.info("Guess: " + guessModel);
+        guessedLetters.add(guessModel.getGuessedLetter());
+        setWordModel(model);
+        return "hangman";
+    }
+
+
+    @GetMapping("/hangman")
+    public String hangMan(Model model) {
+
+        return "index";
+    }
+
+    @PostMapping("/start-hangman-game")
+    public String startHangMan(Model model) {
+
+        this.currentWord = List.of("T", "E", "L", "E", "K", "O", "M");
+        setWordModel(model);
+        return "hangman";
+    }
+
+    private void setWordModel(Model model) {
+        WordToGuessModel wordToGuessModel = new WordToGuessModel();
+        wordToGuessModel.setLetterList(getFilteredLetterList());
+        model.addAttribute("wordToGuess", wordToGuessModel);
+        model.addAttribute("guessModel", new GuessModel());
+    }
+
+	private List<String> getFilteredLetterList() {
+		return this.currentWord.stream().map(this::mapFiltered).toList();
 	}
 
-	@GetMapping("/hangman")
-	public String hangMan(Model model) {
-
-		WordToGuessModel wordToGuessModel = new WordToGuessModel();
-		wordToGuessModel.setWordToGuess(this.currentWord);
-		model.addAttribute("wordToGuess", wordToGuessModel);
-		model.addAttribute("guessModel", new GuessModel());
-
-		return "hangman";
+	private String mapFiltered(String inputLetter) {
+		if (guessedLetters.contains(inputLetter)) {
+			return inputLetter;
+		}
+		return "-";
 	}
-
-	@PostMapping("/start-hangman-game")
-	public String startHangMan(Model model) {
-
-		this.currentWord = List.of("T","E","L","E","K","O","M");
-
-		return "redirect:/hangman";
-	}
-
 }

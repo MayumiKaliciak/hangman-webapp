@@ -9,6 +9,6 @@ import java.util.List;
 @Data
 public class WordToGuessModel {
 
-    List<String> wordToGuess;
+    List<String> letterList;
 
 }
