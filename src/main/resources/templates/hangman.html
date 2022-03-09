@@ -11,8 +11,9 @@
 <body>
 
 <div class="container">
-    <h2>Hangman</h2>
-    <h3>this is the length of the word you have to guess:</h3>
+    <h1>Hangman</h1>
+
+    <h2>This is the length of the word you have to guess:</h2>
     <table class="table table-bordered">
         <thead>
         <td th:each="letter: ${wordToGuess.letterList}">
@@ -21,12 +22,27 @@
         </thead>
     </table>
 
+    <h2>These are the letters you've already tried:</h2>
+    <table class="table table-bordered">
+        <thead>
+        <td th:each="letter: ${guessedLetters}">
+            <p th:text="${letter}">
+        </td>
+        </thead>
+    </table>
 
-<form action="#" th:action="@{/hangman}" th:object="${guessModel}" method="post">
-    <label for="guessedLetter">Please guess a letter:</label>
-    <input type="text" id="guessedLetter" th:field="*{guessedLetter}">
-    <button type="button" class="btn btn-secondary">Submit</button>
-</form>
+
+    <h2>Please guess a letter:</h2>
+    <form class="form-horizontal" th:action="@{/hangman}" th:object="${guessModel}" method="post">
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="guessedLetter" placeholder="Enter letter" th:field="*{guessedLetter}">
+            </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-secondary">Submit</button>
+            </div>
+        </div>
+    </form>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"

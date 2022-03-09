@@ -20,8 +20,15 @@ public class HangManController {
     @PostMapping("/hangman")
     public String wordGuess(@ModelAttribute GuessModel guessModel, Model model) {
         log.info("Guess: " + guessModel);
-        guessedLetters.add(guessModel.getGuessedLetter());
+
+
+        if(!currentWord.contains(guessModel.getGuessedLetter())){
+            guessedLetters.add(guessModel.getGuessedLetter());
+            model.addAttribute("guessedLetters", guessedLetters);
+        }
+
         setWordModel(model);
+
         return "hangman";
     }
 
