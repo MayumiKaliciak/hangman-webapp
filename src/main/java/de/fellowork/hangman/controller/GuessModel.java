@@ -12,6 +12,4 @@ public class GuessModel {
 
  private String guessedLetter;
 
- private List<String> guessedLettersList = new ArrayList<>();
-
 }

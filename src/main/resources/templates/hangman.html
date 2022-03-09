@@ -11,38 +11,35 @@
 <body>
 
 <div class="container">
-    <h1>Hangman</h1>
 
-    <h2>This is the length of the word you have to guess:</h2>
-    <table class="table table-bordered">
+    <h2>Hangman</h2>
+
+    <h5>This is the length of the word you have to guess:</h5>
+    <table >
         <thead>
         <td th:each="letter: ${wordToGuess.letterList}">
-            <p th:text="${letter}">
+            <kbd th:text="${letter}"> </kbd>
         </td>
         </thead>
     </table>
 
-    <h2>These are the letters you've already tried false:</h2>
-    <table class="table table-bordered">
+
+
+
+    <h5>Errorcounter:</h5>
+    <table>
         <thead>
-        <td th:each="letter: ${guessedLetters}">
-            <p th:text="${letter}">
+        <td>
+            <kbd th:text="${errorCounter}"> </kbd>
         </td>
         </thead>
     </table>
 
-    <h2>Errorcounter:</h2>
-    <table class="table table-bordered">
-        <thead>
-        <td> <p th:text="${errorCounter}"> </td>
-        </thead>
-    </table>
 
-
-    <h2>Please guess a letter:</h2>
+    <h5>Please guess a letter:</h5>
     <form class="form-horizontal" th:action="@{/hangman}" th:object="${guessModel}" method="post">
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="guessedLetter" placeholder="Enter letter" th:field="*{guessedLetter}">
+                <input type="text" class="form-control" id="guessedLetter" placeholder="Enter letter" th:field="*{guessedLetter}" autofocus>
             </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
@@ -50,6 +47,8 @@
             </div>
         </div>
     </form>
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"

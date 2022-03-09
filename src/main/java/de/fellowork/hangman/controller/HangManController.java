@@ -8,11 +8,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
 @Controller
 public class HangManController {
+
 
     private List<String> currentWord;
     private List<String> correctlyGuessedLetters = new ArrayList<>();
@@ -23,25 +25,32 @@ public class HangManController {
     public String wordGuess(@ModelAttribute GuessModel guessModel, Model model) {
         log.info("Guess: " + guessModel);
 
-
         if(!currentWord.contains(guessModel.getGuessedLetter())){
             wronglyGuessedLetters.add(guessModel.getGuessedLetter());
             model.addAttribute("guessedLetters", wronglyGuessedLetters);
             setWordModel(model);
             counter = wronglyGuessedLetters.size();
             model.addAttribute("errorCounter", counter);
+
         } else {
             correctlyGuessedLetters.add(guessModel.getGuessedLetter());
             setWordModel(model);
+
             model.addAttribute("guessedLetters", wronglyGuessedLetters);
             model.addAttribute("errorCounter", counter);
-
         }
 
+        if (counter>=5){
 
+            return "lostpage";
+        }
+        if (correctlyGuessedLetters.size() == (currentWord.size()-1)){
+
+            return "winpage";
+        }
         return "hangman";
-    }
 
+    }
 
     @GetMapping("/hangman")
     public String hangMan(Model model) {
@@ -49,8 +58,21 @@ public class HangManController {
         return "index";
     }
 
+    @GetMapping("/lostpage")
+    public String lostGameEnd(Model model) {
+
+        return "index";
+    }
+
+    @GetMapping("/winpage")
+    public String wonGameEnd(Model model) {
+
+        return "index";
+    }
+
     @PostMapping("/start-hangman-game")
     public String startHangMan(Model model) {
+        reset();
 
         this.currentWord = List.of("T", "E", "L", "E", "K", "O", "M");
         setWordModel(model);
@@ -74,4 +96,11 @@ public class HangManController {
 		}
 		return "-";
 	}
+
+    private void reset(){
+        this.currentWord = new ArrayList<>();
+        this.correctlyGuessedLetters = new ArrayList<>();
+        this.wronglyGuessedLetters = new ArrayList<>();
+        this.counter = 0;
+    }
 }
