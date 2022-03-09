@@ -22,12 +22,19 @@
         </thead>
     </table>
 
-    <h2>These are the letters you've already tried:</h2>
+    <h2>These are the letters you've already tried false:</h2>
     <table class="table table-bordered">
         <thead>
         <td th:each="letter: ${guessedLetters}">
             <p th:text="${letter}">
         </td>
+        </thead>
+    </table>
+
+    <h2>Errorcounter:</h2>
+    <table class="table table-bordered">
+        <thead>
+        <td> <p th:text="${errorCounter}"> </td>
         </thead>
     </table>
 

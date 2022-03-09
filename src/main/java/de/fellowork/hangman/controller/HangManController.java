@@ -15,7 +15,9 @@ import java.util.List;
 public class HangManController {
 
     private List<String> currentWord;
-    private List<String> guessedLetters = new ArrayList<>();
+    private List<String> correctlyGuessedLetters = new ArrayList<>();
+    private List<String> wronglyGuessedLetters = new ArrayList<>();
+    private int counter = 0;
 
     @PostMapping("/hangman")
     public String wordGuess(@ModelAttribute GuessModel guessModel, Model model) {
@@ -23,11 +25,19 @@ public class HangManController {
 
 
         if(!currentWord.contains(guessModel.getGuessedLetter())){
-            guessedLetters.add(guessModel.getGuessedLetter());
-            model.addAttribute("guessedLetters", guessedLetters);
+            wronglyGuessedLetters.add(guessModel.getGuessedLetter());
+            model.addAttribute("guessedLetters", wronglyGuessedLetters);
+            setWordModel(model);
+            counter = wronglyGuessedLetters.size();
+            model.addAttribute("errorCounter", counter);
+        } else {
+            correctlyGuessedLetters.add(guessModel.getGuessedLetter());
+            setWordModel(model);
+            model.addAttribute("guessedLetters", wronglyGuessedLetters);
+            model.addAttribute("errorCounter", counter);
+
         }
 
-        setWordModel(model);
 
         return "hangman";
     }
@@ -59,7 +69,7 @@ public class HangManController {
 	}
 
 	private String mapFiltered(String inputLetter) {
-		if (guessedLetters.contains(inputLetter)) {
+		if (correctlyGuessedLetters.contains(inputLetter)) {
 			return inputLetter;
 		}
 		return "-";
