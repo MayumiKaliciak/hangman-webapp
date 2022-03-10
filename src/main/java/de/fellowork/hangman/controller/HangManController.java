@@ -1,6 +1,7 @@
 package de.fellowork.hangman.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,54 +9,60 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Slf4j
 @Controller
 public class HangManController {
 
+    @Autowired
+    WordToGuessModel wordToGuessModel;
 
     private List<String> currentWord;
     private List<String> correctlyGuessedLetters = new ArrayList<>();
     private List<String> wronglyGuessedLetters = new ArrayList<>();
     private int counter = 0;
 
-    @PostMapping("/hangman")
-    public String wordGuess(@ModelAttribute GuessModel guessModel, Model model) {
-        log.info("Guess: " + guessModel);
-
-        if(!currentWord.contains(guessModel.getGuessedLetter())){
-            wronglyGuessedLetters.add(guessModel.getGuessedLetter());
-            model.addAttribute("guessedLetters", wronglyGuessedLetters);
-            setWordModel(model);
-            counter = wronglyGuessedLetters.size();
-            model.addAttribute("errorCounter", counter);
-
-        } else {
-            correctlyGuessedLetters.add(guessModel.getGuessedLetter());
-            setWordModel(model);
-
-            model.addAttribute("guessedLetters", wronglyGuessedLetters);
-            model.addAttribute("errorCounter", counter);
-        }
-
-        if (counter>=5){
-
-            return "lostpage";
-        }
-        if (correctlyGuessedLetters.size() == (currentWord.size()-1)){
-
-            return "winpage";
-        }
-        return "hangman";
-
-    }
 
     @GetMapping("/hangman")
     public String hangMan(Model model) {
 
         return "index";
+    }
+    
+    @PostMapping("/start-hangman-game")
+    public String startHangMan(Model model) {
+        reset();
+
+        this.currentWord = List.of("T", "E", "L", "E", "K", "O", "M");
+        setWordModel(model);
+        
+        return "hangman";
+    }
+
+    @PostMapping("/hangman")
+    public String wordGuess(@ModelAttribute GuessModel guessModel, Model model) {
+        log.info("Guess: " + guessModel);
+
+        if(letterIsPartOfWord(guessModel)){
+            putLetterIntoCorrectLettersList(guessModel);
+            setWordModel(model);
+            setAttributesForErrors(model);
+        } else {
+            setupWronglyGuessedWordsList(guessModel, model);
+            setWordModel(model);
+            countErrors(model);
+        }
+
+        if (passedErrorMargin()){
+
+            return "lostpage";
+        }
+        if (allCorrectLettersFound()){
+
+            return "winpage";
+        }
+        return "hangman";
     }
 
     @GetMapping("/lostpage")
@@ -70,17 +77,31 @@ public class HangManController {
         return "index";
     }
 
-    @PostMapping("/start-hangman-game")
-    public String startHangMan(Model model) {
-        reset();
+    private void setAttributesForErrors(Model model) {
+        model.addAttribute("guessedLetters", wronglyGuessedLetters);
+        model.addAttribute("errorCounter", counter);
+    }
 
-        this.currentWord = List.of("T", "E", "L", "E", "K", "O", "M");
-        setWordModel(model);
-        return "hangman";
+    private void putLetterIntoCorrectLettersList(GuessModel guessModel) {
+        correctlyGuessedLetters.add(guessModel.getGuessedLetter());
+    }
+
+    private boolean letterIsPartOfWord(GuessModel guessModel) {
+        return currentWord.contains(guessModel.getGuessedLetter());
+    }
+
+    private void countErrors(Model model) {
+        counter = wronglyGuessedLetters.size();
+        model.addAttribute("errorCounter", counter);
+    }
+
+    private void setupWronglyGuessedWordsList(GuessModel guessModel, Model model) {
+        wronglyGuessedLetters.add(guessModel.getGuessedLetter());
+        model.addAttribute("guessedLetters", wronglyGuessedLetters);
     }
 
     private void setWordModel(Model model) {
-        WordToGuessModel wordToGuessModel = new WordToGuessModel();
+//        WordToGuessModel wordToGuessModel = new WordToGuessModel();
         wordToGuessModel.setLetterList(getFilteredLetterList());
         model.addAttribute("wordToGuess", wordToGuessModel);
         model.addAttribute("guessModel", new GuessModel());
@@ -96,6 +117,14 @@ public class HangManController {
 		}
 		return "-";
 	}
+
+    private boolean passedErrorMargin() {
+        return counter >= 5;
+    }
+
+    private boolean allCorrectLettersFound() {
+        return correctlyGuessedLetters.size() == (currentWord.size() - 1);
+    }
 
     private void reset(){
         this.currentWord = new ArrayList<>();

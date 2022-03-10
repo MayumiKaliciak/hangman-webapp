@@ -23,8 +23,14 @@
         </thead>
     </table>
 
-
-
+    <h5>These are the letters you've already tried false:</h5>
+    <table>
+        <thead>
+        <td th:each="letter: ${guessedLetters}">
+            <kbd th:text="${letter}"> </kbd>
+        </td>
+        </thead>
+    </table>
 
     <h5>Errorcounter:</h5>
     <table>
