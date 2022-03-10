@@ -10,6 +10,7 @@ import java.util.List;
 @Jacksonized
 @Data
 @Component
+@Qualifier("wordToGuessModel")
 public class WordToGuessModel {
 
     List<String> letterList;
