@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Controller
@@ -36,9 +38,9 @@ public class HangManController {
     }
 
     @PostMapping("/hangman")
-    public String wordGuess(@ModelAttribute GuessModel guessModel, Model model) {
+    public String wordGuess(@ModelAttribute GuessModel guessModel, Model model) throws InterruptedException {
 
-        List<String> wordToGuess = hangmanService.guessLetter(guessModel.getGuessedLetter());
+        List<String> wordToGuess = hangmanService.guessLetter(guessModel.getGuessedLetter().toLowerCase(Locale.ROOT));
 
         if(hangmanService.lostGame()){
             return "lostpage";
@@ -70,6 +72,7 @@ public class HangManController {
 
         int errorCounter = hangmanService.getErrorCounter();
         model.addAttribute("errorCounter", errorCounter);
+        model.addAttribute("imageUrl", "pictures/" + errorCounter +".jpg");
 
         model.addAttribute("guessModel", new GuessModel());
     }

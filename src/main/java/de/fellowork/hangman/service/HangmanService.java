@@ -43,15 +43,16 @@ public class HangmanService {
                 wrongGuess = false;
             }
         }
-
         if(wrongGuess){
-            wronglyGuessedLetters.add(guessedLetter);
+            if(!wronglyGuessedLetters.contains(guessedLetter)) {
+                wronglyGuessedLetters.add(guessedLetter);
+            }
         }
         return getWordToGuess();
     }
 
     public boolean lostGame() {
-        return getErrorCounter()>= 5;
+        return getErrorCounter()>= 8;
     }
 
     public boolean wonGame() {

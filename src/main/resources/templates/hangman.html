@@ -12,7 +12,7 @@
 
 <div class="container">
 
-    <h2>Hangman</h2>
+    <h1>Hangman</h1>
 
     <h5>This is the length of the word you have to guess:</h5>
     <table >
@@ -34,7 +34,7 @@
 
     <h5>Errorcounter: <span class="badge bg-secondary"><div th:text="${errorCounter}" /></span></h5>
 
-    <img src="../pictures/Error1.jpg" th:alt="${errorCounter}" width="460" height="345">
+    <img th:src="${imageUrl}" th:alt="${errorCounter}" width="460" height="345">
 
     <form class="row g-3" th:action="@{/hangman}" th:object="${guessModel}" method="post">
         <div class="col-auto">
