@@ -14,7 +14,8 @@
 
     <h1>Hangman</h1>
 
-    <h5>This is the length of the word you have to guess:</h5>
+    <h2>Your word</h2>
+    <p>This is the length of the word you have to guess:</p>
     <table >
         <thead>
         <td th:each="letter: ${wordToGuess}">
@@ -23,7 +24,10 @@
         </thead>
     </table>
 
-    <h5>These are the letters you've already tried false:</h5>
+    <hr>
+
+    <h2>Errors</h2>
+    <p>These are the letters you've already tried false:</p>
     <table>
         <thead>
         <td th:each="letter: ${wronglyGuessedLetters}">
@@ -32,9 +36,13 @@
         </thead>
     </table>
 
-    <h5>Errorcounter: <span class="badge bg-secondary"><div th:text="${errorCounter}" /></span></h5>
+    <h3>Errorcounter: <span class="badge bg-secondary"><div th:text="${errorCounter}" /></span></h3>
+
+    <hr>
 
     <img th:src="${imageUrl}" th:alt="${errorCounter}" width="460" height="345">
+
+    <hr>
 
     <form class="row g-3" th:action="@{/hangman}" th:object="${guessModel}" method="post">
         <div class="col-auto">
