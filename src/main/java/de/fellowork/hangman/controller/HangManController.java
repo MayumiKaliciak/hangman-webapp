@@ -20,8 +20,8 @@ public class HangManController {
     private final HangmanService hangmanService;
 
     @GetMapping("/hangman")
-    public String hangMan() {
-
+    public String hangMan( Model model) {
+        model.addAttribute("guessModel", new GuessModel());
         return "index";
     }
     @GetMapping("/")
@@ -56,6 +56,7 @@ public class HangManController {
         if(hangmanService.wonGame(playerName)){
             return "winpage";
         }
+        guessModel.setGuessedLetter(null);
         setModelAttributes(model, wordToGuess, guessModel);
         return "hangman";
     }

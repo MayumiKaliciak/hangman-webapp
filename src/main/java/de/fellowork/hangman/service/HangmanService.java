@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -14,58 +12,60 @@ import java.util.Locale;
 public class HangmanService {
 
     private final GuessWordsHandler guessWordsHandler;
-
-    private List<HangmanLetter> currentWord;
-    private List<String> wronglyGuessedLetters;
+    private final Map<String, GameState> allCurrentGames= new HashMap<>();
 
     public void reset(String playerName) {
-        this.currentWord = guessWordsHandler.getRandomGuessWord();
-        this.wronglyGuessedLetters = new ArrayList<>();
+
+        GameState gameState = new GameState(guessWordsHandler.getRandomGuessWord());
+        allCurrentGames.put(playerName, gameState);
     }
 
     public List<String> getWordToGuess(String playerName) {
-        log.info("getWordToGuess {}",playerName);
-        return this.currentWord.stream()
+
+        return getCurrentWord(playerName)
+                .stream()
                 .map(this::mapFiltered)
                 .toList();
     }
 
+    private List<HangmanLetter> getCurrentWord(String playerName) {
+        return this.allCurrentGames.get(playerName)
+                .getCurrentWord();
+    }
+
     public List<String> getWrongGuesses(String playerName) {
-        log.info("getWrongGuesses {}",playerName);
-        return wronglyGuessedLetters;
+
+        return allCurrentGames.get(playerName).getWronglyGuessedLetters();
     }
 
     public int getErrorCounter(String playerName) {
-        log.info("getErrorCounter {}",playerName);
-        return wronglyGuessedLetters.size();
+
+        return getWrongGuesses(playerName).size();
     }
 
     public List<String> guessLetter(String guessedLetter, String playerName) {
-        log.info("guessLetter {}",playerName);
+
         String toLowerCaseGuessLetter = guessedLetter.toLowerCase(Locale.ROOT);
         boolean wrongGuess = true;
-        for(HangmanLetter hangmanLetter: currentWord){
+        for(HangmanLetter hangmanLetter: getCurrentWord(playerName)){
             if(hangmanLetter.getLetter().equals(toLowerCaseGuessLetter)){
                 hangmanLetter.setCorrectlyGuessed(true);
                 wrongGuess = false;
             }
         }
         if(wrongGuess){
-            if(!wronglyGuessedLetters.contains(toLowerCaseGuessLetter)) {
-                wronglyGuessedLetters.add(toLowerCaseGuessLetter);
-            }
+            this.allCurrentGames.get(playerName).addErrorLetter(toLowerCaseGuessLetter);
         }
         return getWordToGuess(playerName);
     }
 
     public boolean lostGame(String playerName) {
-        log.info("lostGame {}",playerName);
         return getErrorCounter(playerName)>= 8;
     }
 
     public boolean wonGame(String playerName) {
-        log.info("wonGame {}",playerName);
-        for(HangmanLetter hangmanLetter: currentWord){
+
+        for(HangmanLetter hangmanLetter: getCurrentWord(playerName)){
             if(!hangmanLetter.isCorrectlyGuessed()){
                 return false;
             }
