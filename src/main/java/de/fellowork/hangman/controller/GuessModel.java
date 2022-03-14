@@ -8,5 +8,6 @@ import lombok.extern.jackson.Jacksonized;
 public class GuessModel {
 
     private String guessedLetter;
+    private String playerName;
 
 }

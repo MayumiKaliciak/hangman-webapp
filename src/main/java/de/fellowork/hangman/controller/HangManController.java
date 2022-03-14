@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Controller
@@ -25,30 +24,39 @@ public class HangManController {
 
         return "index";
     }
-    
+    @GetMapping("/")
+    public String index( Model model) {
+        model.addAttribute("guessModel", new GuessModel());
+        return "index";
+    }
+
     @PostMapping("/start-hangman-game")
-    public String startHangMan(Model model) {
+    public String startHangMan(@ModelAttribute GuessModel guessModel, Model model) {
+        String playerName = guessModel.getPlayerName();
+        hangmanService.reset(playerName);
 
-        hangmanService.reset();
+        List<String> wordToGuess = hangmanService.getWordToGuess(playerName);
 
-        List<String> wordToGuess = hangmanService.getWordToGuess();
-        setModelAttributes(model, wordToGuess);
+        setModelAttributes(model, wordToGuess, guessModel);
 
         return "hangman";
     }
 
+
+
     @PostMapping("/hangman")
     public String wordGuess(@ModelAttribute GuessModel guessModel, Model model) throws InterruptedException {
 
-        List<String> wordToGuess = hangmanService.guessLetter(guessModel.getGuessedLetter().toLowerCase(Locale.ROOT));
+        String playerName = guessModel.getPlayerName();
+        List<String> wordToGuess = hangmanService.guessLetter(guessModel.getGuessedLetter(), playerName);
 
-        if(hangmanService.lostGame()){
+        if(hangmanService.lostGame(playerName)){
             return "lostpage";
         }
-        if(hangmanService.wonGame()){
+        if(hangmanService.wonGame(playerName)){
             return "winpage";
         }
-        setModelAttributes(model, wordToGuess);
+        setModelAttributes(model, wordToGuess, guessModel);
         return "hangman";
     }
 
@@ -64,17 +72,17 @@ public class HangManController {
         return "index";
     }
 
-    private void setModelAttributes(Model model, List<String> wordToGuess) {
+    private void setModelAttributes(Model model, List<String> wordToGuess, GuessModel guessModel) {
         model.addAttribute("wordToGuess", wordToGuess);
 
-        List<String> wronglyGuessedLetters = hangmanService.getWrongGuesses();
+        List<String> wronglyGuessedLetters = hangmanService.getWrongGuesses(guessModel.getPlayerName());
         model.addAttribute("wronglyGuessedLetters", wronglyGuessedLetters);
 
-        int errorCounter = hangmanService.getErrorCounter();
+        int errorCounter = hangmanService.getErrorCounter(guessModel.getPlayerName());
         model.addAttribute("errorCounter", errorCounter);
         model.addAttribute("imageUrl", "pictures/" + errorCounter +".jpg");
 
-        model.addAttribute("guessModel", new GuessModel());
+        model.addAttribute("guessModel",guessModel);
     }
 
 }
