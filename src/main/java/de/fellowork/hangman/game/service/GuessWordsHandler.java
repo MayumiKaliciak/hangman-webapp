@@ -1,4 +1,4 @@
-package de.fellowork.hangman.service;
+package de.fellowork.hangman.game.service;
 
 import org.springframework.stereotype.Component;
 
@@ -6,7 +6,6 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Component
 public class GuessWordsHandler {

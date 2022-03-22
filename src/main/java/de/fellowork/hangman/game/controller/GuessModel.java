@@ -1,4 +1,4 @@
-package de.fellowork.hangman.controller;
+package de.fellowork.hangman.game.controller;
 
 import lombok.Data;
 import lombok.extern.jackson.Jacksonized;
@@ -8,5 +8,6 @@ import lombok.extern.jackson.Jacksonized;
 public class GuessModel {
 
     private String guessedLetter;
+    private String playerName;
 
 }

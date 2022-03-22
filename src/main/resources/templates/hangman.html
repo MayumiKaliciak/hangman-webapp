@@ -12,14 +12,16 @@
 
 <div class="container">
 
-    <h1>Hangman</h1>
+    <h1>Welcome <th:block th:utext="${guessModel.playerName}"/>, let's play Hangman</h1>
+
+    <hr>
 
     <h2>Your word</h2>
     <p>This is the length of the word you have to guess:</p>
     <table >
         <thead>
         <td th:each="letter: ${wordToGuess}">
-            <kbd th:text="${letter}"> </kbd>
+            <kbd th:text="${letter}"/>
         </td>
         </thead>
     </table>
@@ -31,7 +33,7 @@
     <table>
         <thead>
         <td th:each="letter: ${wronglyGuessedLetters}">
-            <kbd th:text="${letter}"> </kbd>
+            <kbd th:text="${letter}"/>
         </td>
         </thead>
     </table>
@@ -46,7 +48,8 @@
 
     <form class="row g-3" th:action="@{/hangman}" th:object="${guessModel}" method="post">
         <div class="col-auto">
-        <input type="text" class="form-control" id="guessedLetter" placeholder="Please guess a letter" th:field="*{guessedLetter}" autofocus required maxlength="1">
+            <input type="hidden" id="playerName" th:field="*{playerName}">
+            <input type="text" class="form-control" id="guessedLetter" placeholder="Please guess a letter" th:field="*{guessedLetter}" autofocus required maxlength="1">
         </div>
         <div class="col-auto">
         <button type="submit" class="btn btn-secondary mb-3">Submit</button>
