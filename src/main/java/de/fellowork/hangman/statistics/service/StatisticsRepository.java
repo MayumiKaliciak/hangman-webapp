@@ -7,9 +7,11 @@ import java.util.List;
 public interface StatisticsRepository extends CrudRepository<Statistics, Long> {
 
     List<Statistics> findByPlayerName(String playerName);
-    List<Statistics> findByWonRounds(Integer wonRounds);
-    List<Statistics> findByLostRounds(Integer lostRounds);
+    List<Statistics> findByWonRounds(int wonRounds);
+    List<Statistics> findByLostRounds(int lostRounds);
+    List<Statistics> findByPlayRounds(int playRounds);
 
-    Statistics findByPlayRounds(long playRounds);
+    Statistics findById(long id);
+
 
 }
