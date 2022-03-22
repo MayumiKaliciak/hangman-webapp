@@ -1,6 +1,6 @@
-package de.fellowork.hangman.controller;
+package de.fellowork.hangman.game.controller;
 
-import de.fellowork.hangman.service.HangmanService;
+import de.fellowork.hangman.game.service.HangmanService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
-import java.util.Locale;
 
 @Slf4j
 @Controller

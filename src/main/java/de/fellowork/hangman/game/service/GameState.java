@@ -1,6 +1,5 @@
-package de.fellowork.hangman.service;
+package de.fellowork.hangman.game.service;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

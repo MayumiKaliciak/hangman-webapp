@@ -1,4 +1,4 @@
-package de.fellowork.hangman.service;
+package de.fellowork.hangman.game.service;
 
 import lombok.*;
 import org.springframework.stereotype.Component;
