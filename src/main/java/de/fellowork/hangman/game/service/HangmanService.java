@@ -1,10 +1,16 @@
 package de.fellowork.hangman.game.service;
 
+import de.fellowork.hangman.game.persistence.GameState;
+import de.fellowork.hangman.game.persistence.GameStateRepository;
+import de.fellowork.hangman.game.persistence.HangmanLetter;
+import de.fellowork.hangman.game.persistence.HangmanLetterRepository;
 import de.fellowork.hangman.statistics.service.StatisticsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.lang.reflect.Field;
 import java.util.*;
 
 @Service
@@ -14,12 +20,17 @@ public class HangmanService {
 
     private final GuessWordsHandler guessWordsHandler;
     private final StatisticsService statisticsService;
-    private final Map<String, GameState> allCurrentGames= new HashMap<>();
+    private final GameStateRepository gameStateRepository;
+    private final HangmanLetterRepository letterRepository;
 
     public void reset(String playerName) {
 
-        GameState gameState = new GameState(guessWordsHandler.getRandomGuessWord());
-        allCurrentGames.put(playerName, gameState);
+        if(gameStateRepository.findByPlayerName(playerName) == null){
+            GameState gameState = new GameState();
+            gameState.setCurrentWord(guessWordsHandler.getRandomGuessWord());
+            gameState.setPlayerName(playerName);
+            gameStateRepository.save(gameState);
+        }
         statisticsService.setupPlayerStatistics(playerName);
     }
 
@@ -32,13 +43,12 @@ public class HangmanService {
     }
 
     private List<HangmanLetter> getCurrentWord(String playerName) {
-        return this.allCurrentGames.get(playerName)
-                .getCurrentWord();
+        return gameStateRepository.findByPlayerName(playerName).getCurrentWord();
     }
 
     public List<String> getWrongGuesses(String playerName) {
 
-        return allCurrentGames.get(playerName).getWronglyGuessedLetters();
+        return gameStateRepository.findByPlayerName(playerName).getWronglyGuessedLetters();
     }
 
     public int getErrorCounter(String playerName) {
@@ -53,11 +63,17 @@ public class HangmanService {
         for(HangmanLetter hangmanLetter: getCurrentWord(playerName)){
             if(hangmanLetter.getLetter().equals(toLowerCaseGuessLetter)){
                 hangmanLetter.setCorrectlyGuessed(true);
+
+                letterRepository.save(hangmanLetter);
+
                 wrongGuess = false;
             }
         }
+
         if(wrongGuess){
-            this.allCurrentGames.get(playerName).addErrorLetter(toLowerCaseGuessLetter);
+            GameState gameState = gameStateRepository.findByPlayerName(playerName);
+            gameState.addErrorLetter(toLowerCaseGuessLetter);
+            gameStateRepository.save(gameState);
         }
         return getWordToGuess(playerName);
     }
@@ -66,6 +82,7 @@ public class HangmanService {
         boolean lostGame = getErrorCounter(playerName)>= 8;
         if(lostGame){
             statisticsService.playerHasLost(playerName);
+            gameStateRepository.deleteByPlayerName(playerName);
         }
         return lostGame;
     }
@@ -78,6 +95,7 @@ public class HangmanService {
             }
         }
         statisticsService.playerWonGame(playerName);
+        gameStateRepository.deleteByPlayerName(playerName);
         return true;
 
     }

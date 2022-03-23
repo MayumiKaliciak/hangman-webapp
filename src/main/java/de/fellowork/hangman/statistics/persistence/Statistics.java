@@ -1,12 +1,12 @@
-package de.fellowork.hangman.statistics.service;
-import de.fellowork.hangman.game.controller.GuessModel;
+package de.fellowork.hangman.statistics.persistence;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.math.BigInteger;
+import java.util.Objects;
 
 
 @Entity
@@ -17,7 +17,7 @@ public class Statistics {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @Column(unique = true)
     private String playerName;
@@ -32,5 +32,18 @@ public class Statistics {
 
     public void incrementLostRounds(){
         this.lostRounds += 1;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Statistics that = (Statistics) o;
+        return id != null && Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

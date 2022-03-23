@@ -1,5 +1,6 @@
 package de.fellowork.hangman.game.service;
 
+import de.fellowork.hangman.game.persistence.HangmanLetter;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -29,8 +30,14 @@ public class GuessWordsHandler {
 
         return guessWords.get(randomEntry)
                 .stream()
-                .map(HangmanLetter::new)
+                .map(this::createLetter)
                 .toList();
+    }
+
+    private HangmanLetter createLetter(String letter) {
+        HangmanLetter hangmanLetter = new HangmanLetter();
+        hangmanLetter.setLetter(letter);
+        return hangmanLetter;
     }
 
 }

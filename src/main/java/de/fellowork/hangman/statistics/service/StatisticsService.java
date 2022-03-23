@@ -1,5 +1,7 @@
 package de.fellowork.hangman.statistics.service;
 
+import de.fellowork.hangman.statistics.persistence.Statistics;
+import de.fellowork.hangman.statistics.persistence.StatisticsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
