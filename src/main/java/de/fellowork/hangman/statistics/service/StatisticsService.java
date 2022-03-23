@@ -1,32 +1,34 @@
 package de.fellowork.hangman.statistics.service;
 
-import de.fellowork.hangman.game.service.HangmanService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class StatisticsService {
 
-    private final HangmanService hangmanService;
+    private final StatisticsRepository statisticsRepository;
 
-    @Bean
-    public void saveStatistics(StatisticsRepository repository, String playerName) {
-        if (repository.findByPlayerName(playerName).isEmpty()) {
-            repository.save(new Statistics(playerName));
-        } else{
-            repository.findByPlayerName(playerName);
-            if (hangmanService.wonGame(playerName)) {
-                //count wonGames;
-                //add 1 wonGame;
-            } else if (hangmanService.lostGame(playerName)) {
-                //count lostGames;
-                //add 1 wonGame;
-            }
+
+    public void setupPlayerStatistics(String playerName) {
+        if(statisticsRepository.findByPlayerName(playerName).isEmpty()){
+            Statistics statistics = new Statistics();
+            statistics.setPlayerName(playerName);
+            statisticsRepository.save(statistics);
         }
-
-
     }
 
+    public void playerWonGame(String playerName) {
+        statisticsRepository.findByPlayerName(playerName).ifPresent(statistics -> {
+            statistics.incrementWonRounds();
+            statisticsRepository.save(statistics);
+        });
+    }
+
+    public void playerHasLost(String playerName) {
+        statisticsRepository.findByPlayerName(playerName).ifPresent(statistics -> {
+            statistics.incrementLostRounds();
+            statisticsRepository.save(statistics);
+        });
+    }
 }

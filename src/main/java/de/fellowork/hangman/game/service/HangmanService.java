@@ -1,5 +1,6 @@
 package de.fellowork.hangman.game.service;
 
+import de.fellowork.hangman.statistics.service.StatisticsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,12 +13,14 @@ import java.util.*;
 public class HangmanService {
 
     private final GuessWordsHandler guessWordsHandler;
+    private final StatisticsService statisticsService;
     private final Map<String, GameState> allCurrentGames= new HashMap<>();
 
     public void reset(String playerName) {
 
         GameState gameState = new GameState(guessWordsHandler.getRandomGuessWord());
         allCurrentGames.put(playerName, gameState);
+        statisticsService.setupPlayerStatistics(playerName);
     }
 
     public List<String> getWordToGuess(String playerName) {
@@ -60,7 +63,11 @@ public class HangmanService {
     }
 
     public boolean lostGame(String playerName) {
-        return getErrorCounter(playerName)>= 8;
+        boolean lostGame = getErrorCounter(playerName)>= 8;
+        if(lostGame){
+            statisticsService.playerHasLost(playerName);
+        }
+        return lostGame;
     }
 
     public boolean wonGame(String playerName) {
@@ -70,7 +77,9 @@ public class HangmanService {
                 return false;
             }
         }
+        statisticsService.playerWonGame(playerName);
         return true;
+
     }
 
     private String mapFiltered(HangmanLetter hangmanLetter) {
