@@ -1,4 +1,4 @@
-package de.fellowork.hangman.statistics.persistence;
+package de.fellowork.mayumi.practice.hangmanwebapp.statistics.persistence;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

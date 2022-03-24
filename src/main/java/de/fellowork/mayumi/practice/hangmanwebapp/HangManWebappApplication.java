@@ -1,4 +1,4 @@
-package de.fellowork.hangman;
+package de.fellowork.mayumi.practice.hangmanwebapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

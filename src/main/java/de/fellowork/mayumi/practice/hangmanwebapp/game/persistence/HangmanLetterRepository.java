@@ -1,4 +1,4 @@
-package de.fellowork.hangman.game.persistence;
+package de.fellowork.mayumi.practice.hangmanwebapp.game.persistence;
 
 import org.springframework.data.repository.CrudRepository;
 

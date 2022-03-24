@@ -1,4 +1,4 @@
-package de.fellowork.hangman.statistics.persistence;
+package de.fellowork.mayumi.practice.hangmanwebapp.statistics.persistence;
 
 import org.springframework.data.repository.CrudRepository;
 

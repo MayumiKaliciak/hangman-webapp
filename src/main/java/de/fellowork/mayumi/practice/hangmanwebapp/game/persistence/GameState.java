@@ -1,8 +1,7 @@
-package de.fellowork.hangman.game.persistence;
+package de.fellowork.mayumi.practice.hangmanwebapp.game.persistence;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.hibernate.Hibernate;
 

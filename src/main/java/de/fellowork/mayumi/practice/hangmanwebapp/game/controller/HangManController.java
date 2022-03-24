@@ -1,6 +1,6 @@
-package de.fellowork.hangman.game.controller;
+package de.fellowork.mayumi.practice.hangmanwebapp.game.controller;
 
-import de.fellowork.hangman.game.service.HangmanService;
+import de.fellowork.mayumi.practice.hangmanwebapp.game.service.HangmanService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

@@ -1,6 +1,6 @@
-package de.fellowork.hangman.game.service;
+package de.fellowork.mayumi.practice.hangmanwebapp.game.service;
 
-import de.fellowork.hangman.game.persistence.HangmanLetter;
+import de.fellowork.mayumi.practice.hangmanwebapp.game.persistence.HangmanLetter;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;

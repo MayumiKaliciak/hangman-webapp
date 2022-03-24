@@ -1,4 +1,4 @@
-package de.fellowork.hangman.game.controller;
+package de.fellowork.mayumi.practice.hangmanwebapp.game.controller;
 
 import lombok.Data;
 import lombok.extern.jackson.Jacksonized;

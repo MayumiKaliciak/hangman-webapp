@@ -1,7 +1,7 @@
-package de.fellowork.hangman.statistics.service;
+package de.fellowork.mayumi.practice.hangmanwebapp.statistics.service;
 
-import de.fellowork.hangman.statistics.persistence.Statistics;
-import de.fellowork.hangman.statistics.persistence.StatisticsRepository;
+import de.fellowork.mayumi.practice.hangmanwebapp.statistics.persistence.Statistics;
+import de.fellowork.mayumi.practice.hangmanwebapp.statistics.persistence.StatisticsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

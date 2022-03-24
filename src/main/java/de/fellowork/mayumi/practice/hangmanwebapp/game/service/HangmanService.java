@@ -1,16 +1,14 @@
-package de.fellowork.hangman.game.service;
+package de.fellowork.mayumi.practice.hangmanwebapp.game.service;
 
-import de.fellowork.hangman.game.persistence.GameState;
-import de.fellowork.hangman.game.persistence.GameStateRepository;
-import de.fellowork.hangman.game.persistence.HangmanLetter;
-import de.fellowork.hangman.game.persistence.HangmanLetterRepository;
-import de.fellowork.hangman.statistics.service.StatisticsService;
+import de.fellowork.mayumi.practice.hangmanwebapp.game.persistence.GameState;
+import de.fellowork.mayumi.practice.hangmanwebapp.game.persistence.GameStateRepository;
+import de.fellowork.mayumi.practice.hangmanwebapp.game.persistence.HangmanLetter;
+import de.fellowork.mayumi.practice.hangmanwebapp.game.persistence.HangmanLetterRepository;
+import de.fellowork.mayumi.practice.hangmanwebapp.statistics.service.StatisticsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-import java.lang.reflect.Field;
 import java.util.*;
 
 @Service
